@@ -1,0 +1,83 @@
+
+// main
+// load number, and check if prime, output 1 if prime 0 otherwise
+input
+store prime_p
+jns prime
+load prime_ret
+output
+halt
+
+// function: prime
+//  input p
+//  returns: P if prime, else E; (in ret)
+prime,      dec 0
+            // initialize the counter
+            load p_two
+            store p_ct
+            // assume a number is prime
+            load p_p
+            store prime_ret
+
+            load prime_p
+            subt p_one
+            skipcond 800
+            jump p_np       // 0 and 1 are not prime
+
+p_loop,     load prime_p
+            subt p_ct
+            skipcond 800    // if p - ct > 0
+            jump p_ip       // else return; is prime
+
+                            // then ..
+            load prime_p
+            store mod_x
+            load p_ct
+            store mod_y
+            jns mod
+            load mod_ret
+            skipcond 800    // if ct % p > 0
+            jump p_np       // else; it is prime
+            load p_ct       // then; not prime
+            add p_one
+            store p_ct
+            jump p_loop
+
+p_np,       load p_e
+            store prime_ret
+p_ip,       jumpi prime
+
+// DATA for prime
+prime_p,    dec 0
+prime_ret,  dec 0
+p_p,        hex 50 // P
+p_e,        hex 45 // E
+p_one,      dec 1
+p_two,      dec 2
+p_ct,       dec 2  // counter
+
+////////////////////////////////
+// function: mod
+//  input x, y
+//  returns: x % y in ret
+mod,        dec 0
+            load mod_x
+
+// load x, subtract y from AC untill <= 0
+mod_loop,   skipcond 800
+            jump mod_clean
+            subt mod_y
+            jump mod_loop
+
+//  if AC == 0, we return 0, else we return AC + y
+mod_clean,  skipcond 400
+            add mod_y
+            store mod_ret
+            jumpi mod
+
+// DATA for mod
+mod_x,   dec 0
+mod_y,	 dec 0
+mod_ret, dec 0
+//////////////////////////////////
+
