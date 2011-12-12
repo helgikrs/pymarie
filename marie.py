@@ -51,7 +51,7 @@ _reserved = set(op_codes.values() + ["dec", "hex"])
 class MarieRam(object):
     """Ram object translating addresses"""
     def __init__(self, buf):
-        self.ram = [0b0] * 2**9 # 1 KiB (2 bytes per word)
+        self.ram = [0b0] * 2**12
         n = 1
         while True:
             val = buf.read(2)
