@@ -287,7 +287,8 @@ class MarieExecutor(object):
         self.pc = self.mbr
 
     def skipcond(self):
-        instr = self.ir & 3 << 10
+        instr = self.ir >> 10 & 0b11
+
         if instr == 0b00:
             if self.ac < 0:
                 self.pc += 1
