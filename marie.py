@@ -95,9 +95,8 @@ class MarieCompiler(object):
         self.symbol_table = {}
         err = False
         op_c = []
-        lineno = 0
         addr = 1
-        for line in self.inp:
+        for (lineno, line) in enumerate(self.inp):
             try:
                 c = self._compile_first(line, addr)
             except CompileError, e:
@@ -110,7 +109,6 @@ class MarieCompiler(object):
                     op_c.append(c)
                     addr += 1
 
-            lineno +=1
 
         for (addr, op, operand, lineno) in op_c:
             try:
@@ -289,15 +287,12 @@ class MarieExecutor(object):
     def skipcond(self):
         instr = self.ir >> 10 & 0b11
 
-        if instr == 0b00:
-            if self.ac < 0:
-                self.pc += 1
-        elif instr == 0b01:
-            if self.ac == 0:
-                self.pc += 1
-        elif instr == 0b10:
-            if self.ac > 0:
-                self.pc += 1
+        if instr == 0b00 and self.ac < 0:
+            self.pc += 1
+        elif instr == 0b01 and self.ac == 0:
+            self.pc += 1
+        elif instr == 0b10 and self.ac > 0:
+            self.pc += 1
 
     def subt(self):
         self.mbr = self.m[self.mar]
